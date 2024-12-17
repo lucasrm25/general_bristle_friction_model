@@ -1,0 +1,5 @@
+function out = norm2(in1)
+   definitions
+      out = sqrt(dot(in1, in1));
+   end
+end

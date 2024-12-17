@@ -1,0 +1,57 @@
+component dynamic_friction < foundation.mechanical.translational.branch
+% Translational Friction
+% The block represents friction in the contact between moving bodies.
+%
+% Connections R and C are mechanical translational conserving ports. 
+% The block positive direction is from port R to port C. This means that if 
+% port R velocity is greater than that of port C, the block transmits force 
+% from port R to port C.
+
+parameters
+    F_g = {1, 'N'}; % F_g
+    F_h = {1, 'N'}; % F_h
+    v_minslip = {1e-2, 'm/s'}
+    lambda_flag = {1, '1'};
+end
+
+parameters (Access=private)
+    eps = {1e-8, 'N*m/s'};
+end
+
+inputs
+    lambda = { 1, '1' }; % lambda:right
+end
+
+variables(Event=true)
+    stick = 1;
+    % slip  = 0;
+end
+
+annotations
+    Icon = "friction.svg"
+end
+
+events
+  when edge( abs(F_h^-1 * f) > 1 )
+    stick = 0;
+  elsewhen edge( abs(v) < v_minslip )
+    stick = 1;
+  end
+end 
+
+equations
+    % Parameter range checking
+    assert( F_g>0 )
+    assert( F_h>0 )
+    if stick
+        v == 0;
+    else
+        f == (lambda * F_g^2 * v ) / (abs(F_g * v) + eps);
+    end
+end
+
+intermediates
+   power_dissipated = f * v;
+end
+
+end

@@ -1,0 +1,32 @@
+component(Hidden=true) branch2d
+% Translational Branch
+% Defines a translational branch with R and C external nodes.
+% Also defines associated through and across variables.
+
+nodes
+    R = translational2d; % R:left
+    C = translational2d; % C:right
+end
+
+variables
+    v = { value = { [0;0], 'm/s' } }; % Velocity
+    f = { [0;0], 'N' };               % Force
+%     v_x = { value = { 0, 'm/s' } }; % Velocity x
+%     v_y = { value = { 0, 'm/s' } }; % Velocity y
+%     f_x = { 0, 'N' };               % Force x
+%     f_y = { 0, 'N' };               % Force y
+end
+
+branches
+    f : R.f -> C.f;
+%     f_x : R.f_x -> C.f_x;
+%     f_y : R.f_y -> C.f_y;
+end
+
+equations
+    v == R.v - C.v;
+%     v_x == R.v_x - C.v_x;
+%     v_y == R.v_y - C.v_y;
+end
+
+end

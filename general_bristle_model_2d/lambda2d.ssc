@@ -1,0 +1,34 @@
+component lambda2d
+% lambda : 0.01 : fixed
+% defines the friction dynamic factor
+  annotations
+    Icon = "lambda2d.svg"
+  end
+
+  nodes
+      top = translational2d; % t:top
+      bottom = translational2d; % b:top
+  end
+
+  outputs
+    l; % l:bottom
+  end
+
+  parameters
+    F_g = {1*eye(2), 'N'}; % F_g
+    lambda_flag = {1, '1'};
+  end
+
+  parameters (Access=private)
+    eps = {1e-8, 'N*m/s'}
+  end
+   
+  equations
+      if lambda_flag
+        l == norm2(F_g * bottom.v) / (norm2(F_g * top.v) + eps);
+      else
+        l == 1;
+      end
+  end
+    
+end
