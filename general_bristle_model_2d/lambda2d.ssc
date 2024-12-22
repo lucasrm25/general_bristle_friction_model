@@ -20,7 +20,7 @@ component lambda2d
   end
 
   parameters (Access=private)
-    eps = {1e-8, 'N*m/s'}
+    eps = {1e-10, 'N*m/s'}
   end
    
   equations

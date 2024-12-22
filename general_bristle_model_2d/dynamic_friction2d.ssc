@@ -15,7 +15,7 @@ parameters
 end
 
 parameters (Access=private)
-    eps = {1e-8, 'N*m/s'};
+    eps = {1e-10, 'N*m/s'};
     one_m_s = {1, 'm/s'};
 end
 
