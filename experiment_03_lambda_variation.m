@@ -1,33 +1,39 @@
 %% Shows the impact of varying the mass
 clearvars; bdclose; 
 
-model = 'general_bristle_model_1d';
-addpath('general_bristle_model_1d')
+model = 'general_bristle_model_2d';
+addpath('general_bristle_model_2d');
 
-save_figs = true;
+save_figs = false;
 fig_prefix = fullfile('experiment_03_lambda_variation','experiment_03_lambda_variation');
+
+color_1 = [0 0 0];
+color_2 = [0 128 255]/255;
+color_3 = [76 0 153]/255;
+linewidth = 1;
 
 %% Set Parameters
 
 dot_rt = [ 
-    % time, velocity
-    0,      0;
-    1,      0;
-    1.1,    1;
-    3,      1;
-    3.1,    0;
+    % time, vx  vy
+    0,      0,  0;
+    1,      0,  0;
+    1.01,    1,  0;
+    3,      1,  0;
+    3.01,    0,  0;
 ];
 
 % friction parameters
-k_1 = 10;
-d_1 = 0;
-k_2 = 10;
-d_2 = 0;
-m_b = 0.01 * 0;
-F_g = 1;
-F_h = 1.2;
+k = 15 * eye(2);
+d = 0 * eye(2);
+k_m = 10 * eye(2);
+d_m = 0 * eye(2);
+
+m_b = 0.0;
+
+F_g = 1 * eye(2);
+F_h = 2 * eye(2);
 v_minslip = 1e-3;
-lambda_flag = 1;
 
 % solver settings
 t_end = 4;
@@ -67,62 +73,21 @@ set(0,'DefaultLegendFontName', 'CMU Serif');
 set(0,'DefaultLegendFontSize', 10);
 set(0,'DefaultTextFontname', 'CMU Serif');
 
-f1 = figure('Color','white', 'Position',[395.4000  463.4000  304.8000  157.6000]); hold on; grid on;
-p1=plot(out_sim_lmb0.simlog.dot_rt.f.series.time, -out_sim_lmb0.simlog.dot_rt.f.series.values, 'DisplayName', '$f_t$ $(\lambda=1)$');
-p2=plot(out_sim_lmb1.simlog.dot_rt.f.series.time, -out_sim_lmb1.simlog.dot_rt.f.series.values, 'DisplayName', '$f_t$ $(\lambda=\lambda_{2D})$');
-p4=plot( ...
-    out_sim_lmb0.simlog.Dynamic_Friction.stick.series.time, ...
-    1-out_sim_lmb0.simlog.Dynamic_Friction.stick.series.values, ...
-    'DisplayName', 'slip $(\lambda=1)$', ...
-    'Color', colors(1,:), 'LineStyle','--' ...
-);
-p5=plot( ...
-    out_sim_lmb1.simlog.Dynamic_Friction.stick.series.time, ...
-    1-out_sim_lmb1.simlog.Dynamic_Friction.stick.series.values, ...
-    'DisplayName', 'slip $(\lambda=\lambda_{2D})$', ...
-    'Color', colors(2,:),'LineStyle','-.' ...
-);
-xlabel('Time [s]', 'Interpreter','latex')
-ylabel('$f_{t}$ [N]', 'Interpreter','latex')
-ylim([0,1.8])
-l = legend([p1,p2,p4,p5],'Location','northeast');
-set(l,'Position',[0.617251435589999 0.640302747187487 0.312543517043214 0.345558377232042]);
-if save_figs
-    savefig(sprintf('%s_f_t.fig',fig_prefix));
-    % saveas(f1, sprintf('%s_f_t.pdf',fig_prefix));
-    exportgraphics(f1, sprintf('%s_f_t.pdf',fig_prefix), 'ContentType', 'vector'); 
-end
+time = out_sim_lmb0.tout;
+f_mu_lmb0 = out_sim_lmb0.simlog.Dynamic_Friction.f.series.values;
+f_mu_lmb1 = out_sim_lmb1.simlog.Dynamic_Friction.f.series.values;
 
-f2 = figure('Color','white', 'Position',[761.8000 420.2000 304.8000  157.6000]); hold on; grid on;
-plot(out_sim_lmb0.simlog.Dynamic_Friction.f.series.time, out_sim_lmb0.simlog.Dynamic_Friction.f.series.values, 'DisplayName', '$f_\mu$ $(\lambda=1)$');
-plot(out_sim_lmb1.simlog.Dynamic_Friction.f.series.time, out_sim_lmb1.simlog.Dynamic_Friction.f.series.values, 'DisplayName', '$f_\mu$ $(\lambda=\lambda_{2D})$');
+% f_mue
+f1 = figure('Color','white', 'Position',[395.4000  463.4000  304.8000  130.6000]); hold on; grid on;
+p1=plot(time, f_mu_lmb0(:,1), 'DisplayName', '$\lambda=1$', 'Color', color_1, 'LineWidth', linewidth);
+p2=plot(time, f_mu_lmb1(:,1), 'DisplayName', '$\lambda=\lambda_{2D}$', 'LineStyle','--', 'Color', color_2, 'LineWidth', linewidth);
+
 xlabel('Time [s]', 'Interpreter','latex')
 ylabel('$f_{\mu}$ [N]', 'Interpreter','latex')
-ylim([0,1.7])
-legend('Location','northeast');
-if save_figs
-    savefig(sprintf('%s_f_mu.fig',fig_prefix));
-    % saveas(f2, sprintf('%s_f_mu.pdf',fig_prefix));
-    exportgraphics(f2, sprintf('%s_f_mu.pdf',fig_prefix), 'ContentType', 'vector'); 
-end
+l = legend([p1,p2],'Location','northeast');
+l.ItemTokenSize = [20, 10];
 
-f3 = figure('Color','white', 'Position',[356.2000  113.8000  304.8000  157.6000]); hold on; grid on;
-p1 = plot(out_sim_lmb0.simlog.Bristle_Mass.v.series.time, out_sim_lmb0.simlog.Bristle_Mass.v.series.values, 'DisplayName', '$\dot r_b$ $(\lambda=1)$');
-p2 = plot(out_sim_lmb1.simlog.Bristle_Mass.v.series.time, out_sim_lmb1.simlog.Bristle_Mass.v.series.values, 'DisplayName', '$\dot r_b$ $(\lambda=\lambda_{2D})$');
-p4 = plot( ...
-    out_sim_lmb0.simlog.dot_rt.v.series.time, ...
-    out_sim_lmb1.simlog.dot_rt.v.series.values, ...
-    'DisplayName', '$\dot r_t$', ...
-    'Color', 'black','LineStyle','--' ...
-);
-xlabel('Time [s]', 'Interpreter','latex')
-ylabel('$\dot r$ [m/s]', 'Interpreter','latex')
-ylim([0,1.8])
-l = legend([p1,p2,p4],'Location','northeast');
-set(l,'Position',[0.575077193285721 0.635226605055508 0.365395938659644 0.345558377232043]);
 if save_figs
-    savefig(sprintf('%s_r_b.fig',fig_prefix));
-    % saveas(f3, sprintf('%s_r_b.pdf',fig_prefix));
-    exportgraphics(f3, sprintf('%s_r_b.pdf',fig_prefix), 'ContentType', 'vector'); 
+    savefig(sprintf('%s_f_t.fig',fig_prefix));
+    exportgraphics(f1, sprintf('%s_lambda_variation_f_mue.pdf',fig_prefix), 'ContentType', 'vector'); 
 end
-
