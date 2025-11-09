@@ -1,0 +1,55 @@
+component dynamic_friction2d < generalBristleFriction2d.branch2d
+% Translational Friction
+% The block represents friction in the contact between moving bodies.
+%
+% Connections R and C are mechanical translational conserving ports. 
+% The block positive direction is from port R to port C. This means that if 
+% port R velocity is greater than that of port C, the block transmits force 
+% from port R to port C.
+
+parameters
+    F_g = {1*eye(2), 'N'}; % F_g
+    F_h = {1*eye(2), 'N'}; % F_h
+    v_minslip = {1e-2, 'm/s'}
+    lambda_flag = {1, '1'};
+end
+
+parameters (Access=private)
+    eps = {1e-10, 'N*m/s'};
+    one_m_s = {1, 'm/s'};
+end
+
+inputs
+    lambda = { 1, '1' }; % lambda:right
+end
+
+variables(Event=true)
+    stick = 1;
+end
+
+annotations
+    Icon = "images/dynamic_friction2d.svg"
+end
+
+events
+  when edge( generalBristleFriction2d.norm2(generalBristleFriction2d.inv2(F_h)*f) > 1 )
+    stick = 0;
+  elsewhen edge( generalBristleFriction2d.norm2(v) < v_minslip )
+    stick = 1;
+  end
+end 
+
+equations
+    if stick
+        v == [0;0] * one_m_s;
+    else
+        f ==  lambda * F_g'*F_g * v  / ( generalBristleFriction2d.norm2(F_g*v) + eps);
+    end
+end
+
+intermediates
+    power_dissipated = dot(f, v);
+    switch_stick_to_slip = generalBristleFriction2d.norm2(generalBristleFriction2d.inv2(F_h) * f);
+end
+
+end

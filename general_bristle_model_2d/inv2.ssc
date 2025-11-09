@@ -1,9 +1,0 @@
-function out = inv2(in1)
-   definitions
-        a = in1(1,1);
-        b = in1(1,2);
-        c = in1(2,1);
-        d = in1(2,2);
-        out = 1/(a*d - b*c) * [d,-b;-c,a];
-   end
-end

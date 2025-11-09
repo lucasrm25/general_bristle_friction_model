@@ -1,8 +1,7 @@
 %% Shows the impact of varying the mass
-clearvars; bdclose; 
+clearvars; clc; close all;
 
-model = 'general_bristle_model_2d';
-addpath('general_bristle_model_2d');
+model = 'generalBristleFriction2d_velocity_input';
 
 save_figs = false;
 fig_prefix = fullfile('experiment_04_rheo_variation','experiment_04_rheo_variation');
@@ -83,7 +82,6 @@ out_sim_jeffreys = sim(model);
 
 
 %% Plot Results
-close all;
 
 colors = [0.1216, 0.4667, 0.7059; ...
           1,      0.4980, 0.0549; ...
@@ -110,12 +108,12 @@ set(0,'DefaultTextFontname', 'CMU Serif');
 time = out_sim_spring.simlog.velocity_input.v.series.time;
 r_t_spring = out_sim_spring.simlog.velocity_input.v.series.values;
 
-f_mu_spring = out_sim_spring.simlog.Dynamic_Friction.f.series.values;
-f_mu_damper = out_sim_damper.simlog.Dynamic_Friction.f.series.values;
-f_mu_maxwell = out_sim_maxwell.simlog.Dynamic_Friction.f.series.values;
-f_mu_kelvin = out_sim_kelvin.simlog.Dynamic_Friction.f.series.values;
-f_mu_zener = out_sim_zener.simlog.Dynamic_Friction.f.series.values;
-f_mu_jeffreys = out_sim_jeffreys.simlog.Dynamic_Friction.f.series.values;
+f_mu_spring = out_sim_spring.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+f_mu_damper = out_sim_damper.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+f_mu_maxwell = out_sim_maxwell.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+f_mu_kelvin = out_sim_kelvin.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+f_mu_zener = out_sim_zener.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+f_mu_jeffreys = out_sim_jeffreys.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
 
 % Spring
 f1 = figure('Color','white', 'Position',[395.4000  463.4000  width  height_sma]); hold on; grid on;

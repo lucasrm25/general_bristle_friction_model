@@ -1,8 +1,7 @@
 %% Shows the impact of varying the mass
-clearvars; bdclose; 
+clearvars; clc; close all;
 
-model = 'general_bristle_model_2d';
-addpath('general_bristle_model_2d');
+model = 'generalBristleFriction2d_velocity_input';
 
 save_figs = false;
 fig_prefix = fullfile('experiment_02_stick_slip_variation','experiment_02_stick_slip_variation');
@@ -50,7 +49,6 @@ out_sim_Fh1p0 = sim(model);
 
 
 %% Plot Results
-close all;
 
 colors = [0.1216, 0.4667, 0.7059; ...
           1,      0.4980, 0.0549; ...
@@ -76,11 +74,11 @@ set(0,'DefaultTextFontname', 'CMU Serif');
 
 time = out_sim_Fh2p0.tout;
 
-f_mu_Fh2p0 = out_sim_Fh2p0.simlog.Dynamic_Friction.f.series.values;
-f_mu_Fh1p0 = out_sim_Fh1p0.simlog.Dynamic_Friction.f.series.values;
+f_mu_Fh2p0 = out_sim_Fh2p0.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+f_mu_Fh1p0 = out_sim_Fh1p0.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
 
-stick_Fh2p0 = out_sim_Fh2p0.simlog.Dynamic_Friction.stick.series.values;
-stick_Fh1p0 = out_sim_Fh1p0.simlog.Dynamic_Friction.stick.series.values;
+stick_Fh2p0 = out_sim_Fh2p0.simlog.generalBristleFriction.Dynamic_Friction.stick.series.values;
+stick_Fh1p0 = out_sim_Fh1p0.simlog.generalBristleFriction.Dynamic_Friction.stick.series.values;
 
 % f_mue
 f1 = figure('Color','white', 'Position',[395.4000  463.4000  304.8000  130.6000]); hold on; grid on;

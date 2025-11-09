@@ -1,8 +1,7 @@
 %% Shows the simulation of the 2d general bristle model
-clearvars; close all;
+clearvars; clc; close all;
 
-model = 'general_bristle_model_2d';
-addpath('general_bristle_model_2d')
+model = 'generalBristleFriction2d_velocity_input';
 
 color_slip = [0 128 255]/255;
 color_stick = [0 0 0]/255;
@@ -34,7 +33,7 @@ dot_rt = [
 dot_rt = [ 
     % time, vx  vy
     0,      0,  0;
-    (1:0.01:3)', 2*sigmf(1:0.01:3, [25,1.2])',  -1*sin(1/2*2*pi*(1:0.01:3))';
+    (1:0.01:3)', 2*1./(1+exp(-25*((1:0.01:3) - 1.2)))',  -1*sin(1/2*2*pi*(1:0.01:3))';
     4, 2, 0
     4.001, 0, 0
 ];
@@ -63,12 +62,12 @@ t_step = 0.001;
 out_sim = sim(model);
 
 %% Get Data
-ell_F_h = ellipse2d(F_h)';
-ell_F_g = ellipse2d(F_g)';
-f_mu = out_sim.simlog.Dynamic_Friction.f.series.values;
-stick = out_sim.simlog.Dynamic_Friction.stick.series.values;
-lambda = out_sim.simlog.Dynamic_Friction.lambda.series.values;
-r_b  = out_sim.simlog.Bristle_Mass.v.series.values;
+ell_F_h = utils.ellipse2d(F_h)';
+ell_F_g = utils.ellipse2d(F_g)';
+f_mu = out_sim.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
+stick = out_sim.simlog.generalBristleFriction.Dynamic_Friction.stick.series.values;
+lambda = out_sim.simlog.generalBristleFriction.Dynamic_Friction.lambda.series.values;
+r_b  = out_sim.simlog.generalBristleFriction.Bristle_Mass.v.series.values;
 r_t = out_sim.simlog.velocity_input.v.series.values;
 time = out_sim.simlog.velocity_input.v.series.time;
 

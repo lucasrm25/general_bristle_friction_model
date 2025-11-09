@@ -1,0 +1,40 @@
+component force2d
+% Ideal Force Source
+% The block represents an ideal source of force that generates 
+% force proportional to the input physical signal. The source is ideal in 
+% a sense that it is assumed to be powerful enough to maintain specified 
+% force regardless of the velocity at source terminals.
+%
+% Block connections R and C are mechanical translational conserving 
+% ports. Port S is the physical signal port, through which control 
+% signal that drives the source is applied. Positive signal at port S 
+% generates force acting from C to R.
+
+annotations
+    Icon = "images/velocity2d.svg"
+end
+
+inputs
+    S = { [0;0], 'N' }; % S:bottom
+end
+
+nodes
+    C = generalBristleFriction2d.translational2d; % C:bottom
+    R = generalBristleFriction2d.translational2d; % R:top
+end
+
+variables(Access = protected)
+    v = { [0;0], 'm/s' };       % Velocity
+    f = { [0;0], 'N' };         % Force
+end
+
+branches
+    f : R.f -> C.f;
+end
+
+equations
+    v == C.v - R.v;
+    f == -S;
+end
+
+end

@@ -8,14 +8,13 @@ component mass2d
 % This means that the inertia force is positive if mass is accelerated 
 % in positive direction. 
 
-% Copyright 2005-2020 The MathWorks, Inc.
 
 nodes
-    M = translational2d; % :top
+    M = generalBristleFriction2d.translational2d; % :top
 end
 
 nodes(ExternalAccess=none)
-    N = translational2d; % :bottom
+    N = generalBristleFriction2d.translational2d; % :bottom
 end
 
 parameters
@@ -26,33 +25,23 @@ end
 if num_ports == 2
     annotations
         N : ExternalAccess=modify
-        Icon = "mass2d.svg"
+        Icon = "images/mass2d.svg"
     end
 end
 
 variables
     v = { value = { [0;0], 'm/s' }, priority = priority.high }; % Velocity
     f = { [0;0], 'N' };                                          % Force
-%     v_x = { value = { 1e-4, 'm/s' }, priority = priority.high }; % Velocity x
-%     v_y = { value = { 1e-4, 'm/s' }, priority = priority.high }; % Velocity y
-%     f_x = { 0, 'N' };                                         % Force x
-%     f_y = { 0, 'N' };                                         % Force y
 end
 
 branches
     f : M.f -> *;
-%     f_x : M.f_x -> *;
-%     f_y : M.f_y -> *;
 end
 
 equations
     assert(mass>=0)
     f == mass * v.der;
     v == M.v;
-%     f_x == mass * v_x.der;
-%     f_y == mass * v_y.der;
-%     v_x == M.v_x;
-%     v_y == M.v_y;
 end
 
 connections

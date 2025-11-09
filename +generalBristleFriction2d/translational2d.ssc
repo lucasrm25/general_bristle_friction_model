@@ -1,0 +1,12 @@
+domain translational2d
+% Mechanical 2d Translational Domain
+
+variables
+    v = {[0;0], 'm/s' }; % Velocity
+end
+
+variables(Balancing = true)
+    f = {[0;0], 'N'} % Force
+end
+
+end

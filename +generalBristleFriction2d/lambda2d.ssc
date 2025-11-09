@@ -1,13 +1,14 @@
 component lambda2d
 % lambda : 0.01 : fixed
 % defines the friction dynamic factor
+  
   annotations
-    Icon = "lambda2d.svg"
+    Icon = "images/lambda2d.svg"
   end
 
   nodes
-      top = translational2d; % t:top
-      bottom = translational2d; % b:top
+      top = generalBristleFriction2d.translational2d; % t:top
+      bottom = generalBristleFriction2d.translational2d; % b:top
   end
 
   outputs
@@ -25,7 +26,7 @@ component lambda2d
    
   equations
       if lambda_flag
-        l == norm2(F_g * bottom.v) / (norm2(F_g * top.v) + eps);
+        l == generalBristleFriction2d.norm2(F_g * bottom.v) / (generalBristleFriction2d.norm2(F_g * top.v) + eps);
       else
         l == 1;
       end

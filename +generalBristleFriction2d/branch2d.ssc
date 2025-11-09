@@ -1,0 +1,24 @@
+component(Hidden=true) branch2d
+% Translational Branch
+% Defines a translational branch with R and C external nodes.
+% Also defines associated through and across variables.
+
+nodes
+    R = generalBristleFriction2d.translational2d; % R:left
+    C = generalBristleFriction2d.translational2d; % C:right
+end
+
+variables
+    v = { value = { [0;0], 'm/s' } }; % Velocity
+    f = { [0;0], 'N' };               % Force
+end
+
+branches
+    f : R.f -> C.f;
+end
+
+equations
+    v == R.v - C.v;
+end
+
+end

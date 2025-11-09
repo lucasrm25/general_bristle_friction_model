@@ -1,8 +1,7 @@
 %% Shows the impact of varying the mass
-clearvars; bdclose; 
+clearvars; clc; close all;
 
-model = 'general_bristle_model_2d';
-addpath('general_bristle_model_2d');
+model = 'generalBristleFriction2d_velocity_input';
 
 save_figs = false;
 fig_prefix = fullfile('experiment_01_mass_variation','experiment_01_mass_variation');
@@ -29,6 +28,8 @@ d = 0 * eye(2);
 k_m = 10 * eye(2);
 d_m = 0 * eye(2);
 
+m_b = 0.00;
+
 F_g = 1 * eye(2);
 F_h = 1.2 * 1e-10 * eye(2);
 
@@ -53,7 +54,6 @@ out_sim_m0p10 = sim(model);
 
 
 %% Plot Results
-close all;
 
 colors = [0.1216, 0.4667, 0.7059; ...
           1,      0.4980, 0.0549; ...
@@ -77,17 +77,17 @@ set(0,'DefaultLegendFontName', 'CMU Serif');
 set(0,'DefaultLegendFontSize', 8);
 set(0,'DefaultTextFontname', 'CMU Serif');
 
-f_mu_m0p00 = out_sim_m0p00.simlog.Dynamic_Friction.f.series.values;
+f_mu_m0p00 = out_sim_m0p00.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
 f_t_m0p00  = out_sim_m0p00.simlog.velocity_input.f.series.values;
-r_b_m0p00  = out_sim_m0p00.simlog.Bristle_Mass.v.series.values;
+r_b_m0p00  = out_sim_m0p00.simlog.generalBristleFriction.Bristle_Mass.v.series.values;
 
-f_mu_m0p05 = out_sim_m0p05.simlog.Dynamic_Friction.f.series.values;
+f_mu_m0p05 = out_sim_m0p05.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
 f_t_m0p05  = out_sim_m0p05.simlog.velocity_input.f.series.values;
-r_b_m0p05  = out_sim_m0p05.simlog.Bristle_Mass.v.series.values;
+r_b_m0p05  = out_sim_m0p05.simlog.generalBristleFriction.Bristle_Mass.v.series.values;
 
-f_mu_m0p10 = out_sim_m0p10.simlog.Dynamic_Friction.f.series.values;
+f_mu_m0p10 = out_sim_m0p10.simlog.generalBristleFriction.Dynamic_Friction.f.series.values;
 f_t_m0p10  = out_sim_m0p10.simlog.velocity_input.f.series.values;
-r_b_m0p10  = out_sim_m0p10.simlog.Bristle_Mass.v.series.values;
+r_b_m0p10  = out_sim_m0p10.simlog.generalBristleFriction.Bristle_Mass.v.series.values;
 
 r_t = out_sim_m0p10.simlog.velocity_input.v.series.values;
 
